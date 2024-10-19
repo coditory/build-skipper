@@ -8,7 +8,7 @@ GitHub action that skips run if:
 Why should you use this action?
 
 - [Standard GitHub file filtering](https://docs.github.com/en/actions/writing-workflows/workflow-syntax-for-github-actions#onpushpull_requestpull_request_targetpathspaths-ignore) skips action but branch protection rules require action to success
-- [Skip Duplicate Actions](https://github.com/marketplace/actions/skip-duplicate-actions) is great and very flexible. This action is highly specialized and comes with a single param.
+- [Skip Duplicate Actions](https://github.com/marketplace/actions/skip-duplicate-actions) is great and very flexible. You should consider using it when you need more options.
 
 ## Sample usage
 
