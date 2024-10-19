@@ -68,7 +68,7 @@ function checkFiles() {
   else
     echo -e "Not skipping. Important files detected."
     echo -e "\nImportant files:"
-    echo "$NOT_SKIPPED"
+    echo "$(echo "$NOT_SKIPPED" | head -n 10)"
     if [ "$(echo $NOT_SKIPPED | wc -l)" -gt 10 ]; then
       echo "..."
     fi
