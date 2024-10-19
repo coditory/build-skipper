@@ -1,6 +1,6 @@
 # action-skipper
 
-Skips action if:
+GitHub action that skip run if:
 - Previous commit passed workflow
 - and there are important files in the push/pull_request
 
@@ -41,4 +41,11 @@ jobs:
             ^.github/.*\.md
             ^docs/.*
             ^gradle.properties
+
+      - name: Setup JDK
+        uses: actions/setup-java@v4
+        if: steps.skipper.outputs.skip != 'true'
+        with:
+          java-version: 21
+          distribution: temurin
 ```
