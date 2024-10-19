@@ -56,15 +56,15 @@ runs:
         declare GREP_CMD=(grep -v)
         while IFS= read -r line; do
           GREP_CMD+=('-e')
-          GREP_CMD+=("$line")
+          GREP_CMD+=("'$line'")
         done <<< "$SKIP_FILES"
-        echo -e "Using grep cmd:\n${GREP_CMD[@]}"
+        echo -e "\nUsing grep cmd:\n${GREP_CMD[@]}\n"
         NOT_SKIPPED="$(echo "$CHANGED_FILES" | "${GREP_CMD[@]}" || true)"
         if [ -z "$NOT_SKIPPED" ]; then
           echo "Skipping. No important files detected."
           echo "skip=true" >> $GITHUB_OUTPUT
         else
-          echo -e "Not skiping. Important files detected:\n$(echo $NOT_SKIPPED | head -n 10)."
+          echo -e "Not skiping. Important files detected."
           echo -e "\nImportant files:"
           echo "$NOT_SKIPPED"
           if [ "$(echo $NOT_SKIPPED | wc -l)" -gt 10 ]; then
