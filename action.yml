@@ -4,7 +4,7 @@ branding:
   icon: 'file'
   color: 'blue'
 inputs:
-  skipFiles:
+  skip-files:
     description: 'Grep file patterns separated with new line that should not trigger action'
     required: false
     default: ''
@@ -35,7 +35,7 @@ runs:
           exit 0
         fi
         echo "Last commit passed ${{ github.workflow }}."
-        declare -r SKIP_FILES="${{ inputs.skipFiles }}"
+        declare -r SKIP_FILES="${{ inputs.skip-files }}"
         if [ -z "$SKIP_FILES" ]; then
           echo "Not skipping. No files patterns to skip defined."
           exit 0
