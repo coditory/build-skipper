@@ -60,19 +60,19 @@ function checkFiles() {
   if [ -z "$NOT_SKIPPED" ]; then
     echo "Skipping. No important files detected."
     echo "skip=true" >> $GITHUB_OUTPUT
+    echo -e "\nChanged files:"
+    echo -e "$(echo "$CHANGED_FILES" | head -n 10)"
+    if [ "$(echo $CHANGED_FILES | wc -l)" -gt 10 ]; then
+      echo "..."
+    fi
   else
-    echo -e "Not skiping. Important files detected."
+    echo -e "Not skipping. Important files detected."
     echo -e "\nImportant files:"
     echo "$NOT_SKIPPED"
     if [ "$(echo $NOT_SKIPPED | wc -l)" -gt 10 ]; then
       echo "..."
     fi
     echo "skip=false" >> $GITHUB_OUTPUT
-  fi
-  echo -e "\nChanged files:"
-  echo -e "$(echo "$CHANGED_FILES" | head -n 10)"
-  if [ "$(echo $CHANGED_FILES | wc -l)" -gt 10 ]; then
-    echo "..."
   fi
 }
 
