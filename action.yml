@@ -22,4 +22,4 @@ runs:
         PUSH_SHAS: ${{ join(github.event.commits.*.id, ' ') || 'none' }}
         PR_BASE_SHA: ${{ github.event.pull_request.base.sha }}
         PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
-      run: ./action.sh
+      run: $GITHUB_ACTION_PATH/action.sh
