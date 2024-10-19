@@ -53,7 +53,7 @@ function checkFiles() {
   declare GREP_CMD=(grep -v)
   while IFS= read -r line; do
     GREP_CMD+=('-e')
-    GREP_CMD+=("'$line'")
+    GREP_CMD+=("$line")
   done <<< "$SKIP_FILES"
   echo -e "\nUsing grep cmd:\n${GREP_CMD[@]}\n"
   NOT_SKIPPED="$(echo "$CHANGED_FILES" | "${GREP_CMD[@]}" || true)"
