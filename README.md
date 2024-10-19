@@ -12,7 +12,7 @@ Why should you use this action?
 
 ## Sample usage
 
-```
+```yml
 name: Build
 
 on:
