@@ -9,7 +9,7 @@ declare -r PREV_SHA="$(git rev-parse HEAD~1 2>/dev/null || true)"
 function exitIfInitCommit() {
   if [ "$PREV_SHA" == "HEAD~1" ]; then
     echo "Not skipping. It's an initial commit."
-    echo "skip=false" >> $GITHUB_OUTPUT
+    echo "skip=false" | tee -a $GITHUB_OUTPUT
     exit 0
   fi
 }
@@ -22,7 +22,7 @@ function exitIfActionFailedForPrevCommit() {
     | jq -r "limit(1; .workflow_runs[] | select(.name == \"$GITHUB_WORKFLOW\" and (.conclusion == \"success\" or .conclusion == \"skipped\"))) | .conclusion")"
   if [ -z "$buildSuccess"  ]; then
     echo "Not skipping. Last commit did not pass $GITHUB_WORKFLOW."
-    echo "skip=false" >> $GITHUB_OUTPUT
+    echo "skip=false" | tee -a $GITHUB_OUTPUT
     exit 0
   fi
   echo "Last commit passed $GITHUB_WORKFLOW."
@@ -31,7 +31,7 @@ function exitIfActionFailedForPrevCommit() {
 function exitIfNoSkipFilesDefined() {
   if [ -z "$SKIP_FILES" ]; then
     echo "Not skipping. No files patterns to skip defined."
-    echo "skip=false" >> $GITHUB_OUTPUT
+    echo "skip=false" | tee -a $GITHUB_OUTPUT
     exit 0
   fi
 }
@@ -47,7 +47,7 @@ function checkFiles() {
       ;;
     *)
       echo "Not skipping. Event "GITHUB_EVENT_NAME" should not be skipped."
-      echo "skip=false" >> $GITHUB_OUTPUT
+      echo "skip=false" | tee -a $GITHUB_OUTPUT
       exit 0
   esac
   declare GREP_CMD=(grep -v)
@@ -72,7 +72,7 @@ function checkFiles() {
     if [ "$(echo $NOT_SKIPPED | wc -l)" -gt 10 ]; then
       echo "..."
     fi
-    echo "skip=false" >> $GITHUB_OUTPUT
+    echo "skip=false" | tee -a $GITHUB_OUTPUT
   fi
 }
 
