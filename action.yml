@@ -4,7 +4,7 @@ branding:
   icon: 'file'
   color: 'blue'
 inputs:
-  skip-files:
+  skip_files:
     description: 'Grep file patterns separated with new line that should not trigger action'
     required: false
     default: ''
@@ -18,7 +18,7 @@ runs:
     - id: skipper
       shell: bash
       env:
-        SKIP_FILES: ${{ inputs.skip-files }}
+        SKIP_FILES: ${{ inputs.skip_files }}
         PUSH_SHAS: ${{ join(github.event.commits.*.id, ' ') || 'none' }}
         PR_BASE_SHA: ${{ github.event.pull_request.base.sha }}
         PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}

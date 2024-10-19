@@ -6,7 +6,7 @@ Development instructions.
 
 Update latest version only when there are backward compatible changes.
 
-```
+```sh
 git commit -A -m "Fix XYZ" \
   && git push \
   && git tag "v1" --force \
