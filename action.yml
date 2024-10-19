@@ -18,7 +18,7 @@ runs:
     - id: skipper
       shell: bash
       env:
-        SKIP_FILES: ${{ input.skip-files }}
+        SKIP_FILES: ${{ inputs.skip-files }}
         PUSH_SHAS: ${{ join(github.event.commits.*.id, ' ') || 'none' }}
         PR_BASE_SHA: ${{ github.event.pull_request.base.sha }}
         PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
