@@ -1,4 +1,4 @@
-# GitHub Action Skipper
+# GitHub Skip Action
 
 GitHub action that skips run if:
 
