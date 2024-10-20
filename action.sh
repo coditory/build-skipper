@@ -52,8 +52,11 @@ function checkFiles() {
   esac
   declare GREP_CMD=(grep -v)
   while IFS= read -r line; do
-    GREP_CMD+=('-e')
-    GREP_CMD+=("$line")
+    TRIMMED="$(echo "$line" | sed -s -e "s|^ *||" -e "s| *$||")"
+    if [ -n "$TRIMMED" ]; then
+      GREP_CMD+=('-e')
+      GREP_CMD+=("$TRIMMED")
+    fi
   done <<< "$SKIP_FILES"
   echo -e "\nUsing grep cmd:\n${GREP_CMD[@]}\n"
   NOT_SKIPPED="$(echo "$CHANGED_FILES" | "${GREP_CMD[@]}" || true)"
