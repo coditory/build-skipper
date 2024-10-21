@@ -59,5 +59,5 @@ jobs:
 ## References
 
 See:
-- [Other Coditory workflows](https://github.com/topics/coditory-workflows)
-- [Coditory actions](https://github.com/topics/coditory-actions)
+- [Other Coditory actions](https://github.com/topics/coditory-actions)
+- [Coditory workflows](https://github.com/topics/coditory-workflows)
