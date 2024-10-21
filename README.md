@@ -55,3 +55,9 @@ jobs:
           java-version: 21
           distribution: temurin
 ```
+
+## References
+
+See:
+- [Other Coditory workflows](https://github.com/topics/coditory-workflows)
+- [Coditory actions](https://github.com/topics/coditory-actions)
