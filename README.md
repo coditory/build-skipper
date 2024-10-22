@@ -1,4 +1,4 @@
-# GitHub Skip Action
+# Coditory Skip GitHub Action
 
 GitHub action that skips run if:
 

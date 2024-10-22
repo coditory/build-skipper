@@ -1,8 +1,8 @@
-name: 'Action skipper'
-description: 'Used to skip actions when there are no important files and previos run succeeded.'
+name: 'Coditory action skipper'
+description: 'Skips actions when there are no important files submitted and previous run succeeded.'
 branding:
-  icon: 'file'
-  color: 'blue'
+  icon: file
+  color: blue
 inputs:
   skip-files:
     description: 'Grep file patterns separated with new line that should not trigger action'
