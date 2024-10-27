@@ -4,8 +4,24 @@ branding:
   icon: file
   color: blue
 inputs:
+  files:
+    description: 'Grep file patterns separated with new line that should trigger action.'
+    required: false
+    default: ''
   skip-files:
-    description: 'Grep file patterns separated with new line that should not trigger action'
+    description: 'Grep file patterns separated with new line that should not trigger action.'
+    required: false
+    default: ''
+  skip-init-commit:
+    description: 'If the action should skip for the first commit.'
+    required: false
+    default: 'false'
+  check-prev-workflow-status:
+    description: 'Whether to check the previous workflow status. If the workflow did not succeed for the previous commit the action will not skip.'
+    required: false
+    default: 'false'
+  skip-messages:
+    description: 'Commit messages that will result in skip (substrings, seprated with new lines).'
     required: false
     default: ''
 outputs:
@@ -18,7 +34,11 @@ runs:
     - id: skipper
       shell: bash
       env:
+        FILES: ${{ inputs.files }}
         SKIP_FILES: ${{ inputs.skip-files }}
+        SKIP_INIT_COMMIT: ${{ inputs.skip-init-commit }}
+        CHECK_PREV_WORKFLOW_STATUS: ${{ inputs.check-prev-workflow-status }}
+        SKIP_MESSAGES: ${{ inputs.skip-messages }}
         PUSH_SHAS: ${{ join(github.event.commits.*.id, ' ') || 'none' }}
         PR_BASE_SHA: ${{ github.event.pull_request.base.sha }}
         PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
