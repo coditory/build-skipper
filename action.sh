@@ -67,7 +67,7 @@ function checkFiles() {
   local -r grepCmd="$(grepCmd "" "$FILES")"
   echo -e "\nUsing grep command to filter files:\n${grepCmd}\n"
   local -r foundFiles="$(echo "$changedFiles" | ${grepCmd} || true)"
-  if [ -z "$foundFiles" ]; then
+  if [ -n "$foundFiles" ]; then
     echo -e "Not skipping: Important files detected." | tee -a $GITHUB_STEP_SUMMARY
     echo -e "\nImportant files:"
     echo "$(echo "$foundFiles" | head -n 10)"
@@ -92,15 +92,7 @@ function checkSkipFiles() {
   local -r grepCmd="$(grepCmd "-v" "$SKIP_FILES")"
   echo -e "\nUsing grep command to filter skip-files:\n${grepCmd}\n"
   local -r foundFiles="$(echo "$changedFiles" | ${grepCmd} || true)"
-  if [ -z "$foundFiles" ]; then
-    echo "Skipping: No important files detected." | tee -a $GITHUB_STEP_SUMMARY
-    echo "skip=true" >> $GITHUB_OUTPUT
-    echo -e "\nChanged files:"
-    echo -e "$(echo "$changedFiles" | head -n 10)"
-    if [ "$(echo $changedFiles | wc -l)" -gt 10 ]; then
-      echo "..."
-    fi
-  else
+  if [ -n "$foundFiles" ]; then
     echo -e "Not skipping: Important files detected." | tee -a $GITHUB_STEP_SUMMARY
     echo -e "\nImportant files:"
     echo "$(echo "$foundFiles" | head -n 10)"
@@ -108,6 +100,14 @@ function checkSkipFiles() {
       echo "..."
     fi
     echo "skip=false" | tee -a $GITHUB_OUTPUT
+  else
+    echo "Skipping: No important files detected." | tee -a $GITHUB_STEP_SUMMARY
+    echo "skip=true" >> $GITHUB_OUTPUT
+    echo -e "\nChanged files:"
+    echo -e "$(echo "$changedFiles" | head -n 10)"
+    if [ "$(echo $changedFiles | wc -l)" -gt 10 ]; then
+      echo "..."
+    fi
   fi
   exit 0
 }
