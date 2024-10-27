@@ -128,7 +128,7 @@ if [ "$CHECK_PREV_WORKFLOW_STATUS" == "true" ]; then
   noSkipIfInitCommit
   noSkipIfActionFailedForPrevCommit
 fi
-if [ -z "$SKIP_MESSAGES" ]; then
+if [ -n "$SKIP_MESSAGES" ]; then
   skipCommitMessages
 fi
 
