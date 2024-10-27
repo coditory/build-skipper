@@ -12,10 +12,6 @@ inputs:
     description: 'Grep file patterns separated with new line that should not trigger action.'
     required: false
     default: ''
-  skip-init-commit:
-    description: 'If the action should skip for the first commit.'
-    required: false
-    default: 'false'
   check-prev-workflow-status:
     description: 'Whether to check the previous workflow status. If the workflow did not succeed for the previous commit the action will not skip.'
     required: false
@@ -36,7 +32,6 @@ runs:
       env:
         FILES: ${{ inputs.files }}
         SKIP_FILES: ${{ inputs.skip-files }}
-        SKIP_INIT_COMMIT: ${{ inputs.skip-init-commit }}
         CHECK_PREV_WORKFLOW_STATUS: ${{ inputs.check-prev-workflow-status }}
         SKIP_MESSAGES: ${{ inputs.skip-messages }}
         PUSH_SHAS: ${{ join(github.event.commits.*.id, ' ') || 'none' }}

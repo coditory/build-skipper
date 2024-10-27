@@ -120,10 +120,8 @@ elif [ -n "$FILES" ] && [ -n "$SKIP_FILES" ]; then
   exit 1
 fi
 
-if [ "$SKIP_INIT_COMMIT" == "true" ]; then
-  noSkipIfInitCommit
-fi
 if [ "$CHECK_PREV_WORKFLOW_STATUS" == "true" ]; then
+  noSkipIfInitCommit
   noSkipIfActionFailedForPrevCommit
 fi
 if [ -z "$SKIP_MESSAGES" ]; then
