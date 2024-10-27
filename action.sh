@@ -12,6 +12,7 @@ function noSkipIfInitCommit() {
     echo "skip=false" | tee -a $GITHUB_OUTPUT
     exit 0
   fi
+  echo "It's not an init commit."
 }
 
 function noSkipIfActionFailedForPrevCommit() {
@@ -36,6 +37,9 @@ function skipIfReleaseCommit() {
     echo "skip=true" | tee -a $GITHUB_OUTPUT
     exit 0
   fi
+  echo "Its not a release commit."
+  echo "Author: $AUTHOR"
+  echo "Message: $MESSAGE"
 }
 
 function noSkipIfNoFilesConfigured() {
