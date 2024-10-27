@@ -16,7 +16,7 @@ inputs:
     description: 'Whether to check the previous workflow status. If the workflow did not succeed for the previous commit the action will not skip.'
     required: false
     default: 'false'
-  skip-messages:
+  skip-commit-messages:
     description: 'Commit messages that will result in skip (substrings, seprated with new lines).'
     required: false
     default: ''
@@ -33,7 +33,7 @@ runs:
         FILES: ${{ inputs.files }}
         SKIP_FILES: ${{ inputs.skip-files }}
         CHECK_PREV_WORKFLOW_STATUS: ${{ inputs.check-prev-workflow-status }}
-        SKIP_MESSAGES: ${{ inputs.skip-messages }}
+        SKIP_MESSAGES: ${{ inputs.skip-commit-messages }}
         PUSH_SHAS: ${{ join(github.event.commits.*.id, ' ') || 'none' }}
         PR_BASE_SHA: ${{ github.event.pull_request.base.sha }}
         PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
