@@ -68,21 +68,23 @@ function checkFiles() {
   echo -e "\nUsing grep command to filter files:\n${grepCmd}\n"
   local -r foundFiles="$(echo "$changedFiles" | ${grepCmd} || true)"
   if [ -n "$foundFiles" ]; then
-    echo -e "Not skipping: Important files detected." | tee -a $GITHUB_STEP_SUMMARY
-    echo -e "\nImportant files:"
-    echo "$(echo "$foundFiles" | head -n 10)"
+    echo "Not skipping: Important files detected." | tee -a $GITHUB_STEP_SUMMARY
+    echo "Important files:"
+    echo -e "$(echo "$foundFiles" | head -n 10)"
     if [ "$(echo "$foundFiles" | wc -l)" -gt 10 ]; then
       echo "..."
     fi
+    echo ""
     echo "skip=false" | tee -a $GITHUB_OUTPUT
   else
     echo "Skipping: No important files detected." | tee -a $GITHUB_STEP_SUMMARY
-    echo "skip=true" >> $GITHUB_OUTPUT
-    echo -e "\nChanged files:"
+    echo "Changed files:"
     echo -e "$(echo "$changedFiles" | head -n 10)"
     if [ "$(echo $changedFiles | wc -l)" -gt 10 ]; then
       echo "..."
     fi
+    echo ""
+    echo "skip=true" >> $GITHUB_OUTPUT
   fi
   exit 0
 }
@@ -93,21 +95,23 @@ function checkSkipFiles() {
   echo -e "\nUsing grep command to filter skip-files:\n${grepCmd}\n"
   local -r foundFiles="$(echo "$changedFiles" | ${grepCmd} || true)"
   if [ -n "$foundFiles" ]; then
-    echo -e "Not skipping: Important files detected." | tee -a $GITHUB_STEP_SUMMARY
-    echo -e "\nImportant files:"
-    echo "$(echo "$foundFiles" | head -n 10)"
+    echo "Not skipping: Important files detected." | tee -a $GITHUB_STEP_SUMMARY
+    echo "Important files:"
+    echo -e "$(echo "$foundFiles" | head -n 10)"
     if [ "$(echo $foundFiles | wc -l)" -gt 10 ]; then
       echo "..."
     fi
+    echo ""
     echo "skip=false" | tee -a $GITHUB_OUTPUT
   else
     echo "Skipping: No important files detected." | tee -a $GITHUB_STEP_SUMMARY
-    echo "skip=true" >> $GITHUB_OUTPUT
-    echo -e "\nChanged files:"
+    echo "Changed files:"
     echo -e "$(echo "$changedFiles" | head -n 10)"
     if [ "$(echo $changedFiles | wc -l)" -gt 10 ]; then
       echo "..."
     fi
+    echo ""
+    echo "skip=true" >> $GITHUB_OUTPUT
   fi
   exit 0
 }
