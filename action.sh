@@ -89,11 +89,8 @@ function checkFiles() {
   fi
 }
 
-function main() {
-  noSkipIfInitCommit
-  noSkipIfActionFailedForPrevCommit
-  skipIfReleaseCommit
-  noSkipIfNoFilesConfigured
-  checkFiles
-}
-
+noSkipIfInitCommit
+noSkipIfActionFailedForPrevCommit
+skipIfReleaseCommit
+noSkipIfNoFilesConfigured
+checkFiles
