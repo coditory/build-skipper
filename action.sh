@@ -30,7 +30,7 @@ function noSkipIfActionFailedForPrevCommit() {
 }
 
 function skipIfReleaseCommit() {
-  local -r AUTHOR="$(git log -1 --pretty=format:'%an' 2>/dev/null)"
+  local -r AUTHOR="$(git log -1 --pretty=format:'%ae' 2>/dev/null)"
   local -r MESSAGE="$(git log -1 --pretty=format:'%s' 2>/dev/null)"
   if [[ "$AUTHOR" == *"coditory[bot]@users.noreply.github.com" ]] && [[ "$MESSAGE" == "Update version"* ]]; then
     echo "Skipping. It's a version update commit." | tee -a $GITHUB_STEP_SUMMARY
@@ -38,8 +38,6 @@ function skipIfReleaseCommit() {
     exit 0
   fi
   echo "Its not a release commit."
-  echo "Author: $AUTHOR"
-  echo "Message: $MESSAGE"
 }
 
 function noSkipIfNoFilesConfigured() {
