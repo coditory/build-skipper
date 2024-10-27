@@ -128,7 +128,7 @@ if [ -z "$SKIP_MESSAGES" ]; then
   skipCommitMessages
 fi
 
-if [ -z "$FILES" ]; then
+if [ -n "$FILES" ]; then
   checkFiles
 else
   checkSkipFiles
