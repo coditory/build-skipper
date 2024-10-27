@@ -84,11 +84,12 @@ function checkFiles() {
       echo "..."
     fi
   fi
+  exit 0
 }
 
 function checkSkipFiles() {
   local -r changedFiles="$(changedFiles)"
-  local -r grepCmd="$(grepCmd "-v" "$FILES")"
+  local -r grepCmd="$(grepCmd "-v" "$SKIP_FILES")"
   echo -e "\nUsing grep command to filter skip-files:\n${grepCmd}\n"
   local -r foundFiles="$(echo "$changedFiles" | ${grepCmd} || true)"
   if [ -z "$foundFiles" ]; then
@@ -108,6 +109,7 @@ function checkSkipFiles() {
     fi
     echo "skip=false" | tee -a $GITHUB_OUTPUT
   fi
+  exit 0
 }
 
 if [ -z "$FILES" ] && [ -z "$SKIP_FILES" ]; then
