@@ -15,7 +15,7 @@ inputs:
   check-prev-workflow-status:
     description: 'Whether to check the previous workflow status. If the workflow did not succeed for the previous commit the action will not skip.'
     required: false
-    default: 'false'
+    default: 'true'
   skip-commit-messages:
     description: 'Commit messages that will result in skip (substrings, seprated with new lines).'
     required: false
