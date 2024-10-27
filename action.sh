@@ -6,31 +6,41 @@ set -euf -o pipefail
 
 declare -r PREV_SHA="$(git rev-parse HEAD~1 2>/dev/null || true)"
 
-function exitIfInitCommit() {
+function noSkipIfInitCommit() {
   if [ "$PREV_SHA" == "HEAD~1" ]; then
-    echo "Not skipping. It's an initial commit."
+    echo "Not skipping. It's an initial commit." | tee -a $GITHUB_STEP_SUMMARY
     echo "skip=false" | tee -a $GITHUB_OUTPUT
     exit 0
   fi
 }
 
-function exitIfActionFailedForPrevCommit() {
+function noSkipIfActionFailedForPrevCommit() {
   local -r runs="$(gh api \
     -H "Accept: application/vnd.github+json" \
     /repos/$GITHUB_REPOSITORY/actions/runs?head_sha=$PREV_SHA)"
   local -r buildSuccess="$(echo "$runs" \
     | jq -r "limit(1; .workflow_runs[] | select(.name == \"$GITHUB_WORKFLOW\" and (.conclusion == \"success\" or .conclusion == \"skipped\"))) | .conclusion")"
   if [ -z "$buildSuccess"  ]; then
-    echo "Not skipping. Last commit did not pass $GITHUB_WORKFLOW."
+    echo "Not skipping. Last commit did not pass $GITHUB_WORKFLOW." | tee -a $GITHUB_STEP_SUMMARY
     echo "skip=false" | tee -a $GITHUB_OUTPUT
     exit 0
   fi
   echo "Last commit passed $GITHUB_WORKFLOW."
 }
 
-function exitIfNoSkipFilesDefined() {
+function skipIfReleaseCommit() {
+  local -r AUTHOR="$(git log -1 --pretty=format:'%an' 2>/dev/null)"
+  local -r MESSAGE="$(git log -1 --pretty=format:'%s' 2>/dev/null)"
+  if [[ "$AUTHOR" == *"dependabot[bot]@users.noreply.github.com" ]] && [[ "$MESSAGE" == "Update version"* ]]; then
+    echo "Skipping. It's a version update commit." | tee -a $GITHUB_STEP_SUMMARY
+    echo "skip=true" | tee -a $GITHUB_OUTPUT
+    exit 0
+  fi
+}
+
+function noSkipIfNoFilesConfigured() {
   if [ -z "$SKIP_FILES" ]; then
-    echo "Not skipping. No files patterns to skip defined."
+    echo "Not skipping. No files patterns to skip defined." | tee -a $GITHUB_STEP_SUMMARY
     echo "skip=false" | tee -a $GITHUB_OUTPUT
     exit 0
   fi
@@ -61,7 +71,7 @@ function checkFiles() {
   echo -e "\nUsing grep cmd:\n${GREP_CMD[@]}\n"
   NOT_SKIPPED="$(echo "$CHANGED_FILES" | "${GREP_CMD[@]}" || true)"
   if [ -z "$NOT_SKIPPED" ]; then
-    echo "Skipping. No important files detected."
+    echo "Skipping. No important files detected." | tee -a $GITHUB_STEP_SUMMARY
     echo "skip=true" >> $GITHUB_OUTPUT
     echo -e "\nChanged files:"
     echo -e "$(echo "$CHANGED_FILES" | head -n 10)"
@@ -69,7 +79,7 @@ function checkFiles() {
       echo "..."
     fi
   else
-    echo -e "Not skipping. Important files detected."
+    echo -e "Not skipping. Important files detected." | tee -a $GITHUB_STEP_SUMMARY
     echo -e "\nImportant files:"
     echo "$(echo "$NOT_SKIPPED" | head -n 10)"
     if [ "$(echo $NOT_SKIPPED | wc -l)" -gt 10 ]; then
@@ -79,7 +89,11 @@ function checkFiles() {
   fi
 }
 
-exitIfInitCommit
-exitIfActionFailedForPrevCommit
-exitIfNoSkipFilesDefined
-checkFiles
+function main() {
+  noSkipIfInitCommit
+  noSkipIfActionFailedForPrevCommit
+  skipIfReleaseCommit
+  noSkipIfNoFilesConfigured
+  checkFiles
+}
+
